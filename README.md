@@ -2,7 +2,7 @@
 
 同步 Twitter 到新浪微博...
 参考了前同事的 [t2w](https://github.com/xream/t2w)。
-不过我这个 Ruby 的实现不用自己查 Twitter UserID，而且链接用 goo.gl 缩短即使被墙也可以成功发到新浪上。
+不过我这个 Ruby 的实现不用自己查 Twitter UserID，而且链接用 goo.gl 缩短即使被墙也可以成功发到新浪上，比他的好用一点 ^___^
 
 ### 安装
 
@@ -14,7 +14,7 @@ $ bundle install
 
 新建一个 config.yml 文件，内容如下：
 
-``` yaml config.yml
+``` yaml
 twitter:
   screen_name:        twitter_screen_name # 比如 @lexrus 就用 lexrus
   consumer_key:       YOUR_CONSUMER_KEY # 在这儿申请: https://dev.twitter.com
