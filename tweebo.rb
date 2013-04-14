@@ -66,6 +66,7 @@ twitterClient = TweetStream::Client.new
 
 WeiboOAuth2::Config.api_key = configs['weibo']['app_key']
 WeiboOAuth2::Config.api_secret = configs['weibo']['app_secret']
+WeiboOAuth2::Config.redirect_uri = configs['weibo']['callback_url']
 
 weiboClient = WeiboOAuth2::Client.new
 weiboToken = weiboClient.password.get_token(configs['weibo']['username'], configs['weibo']['password'])
@@ -85,7 +86,7 @@ twitterClient.on_timeline_status do |status|
     weiboClient.get_token_from_hash({:access_token => weiboToken.token, :expires_at => weiboToken.expires_at})
   end
 
-  return if !weiboClient.statuses
+  return if weiboClient.statuses.nil?
   begin
     weiboText = institutionalizedWeibo(status.text) || DateTime.now().to_s
     weiboClient.statuses.update(weiboText)

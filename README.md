@@ -27,6 +27,7 @@ weibo:
   app_secret:   63b64d531b98c2dbff2443816f274dd3
   username:     微博用户名
   password:     微博密码
+  callback_url: http://weibo.com/
 ```
 
 建议用 supervisor 启动 ```ruby tweebo.rb```
