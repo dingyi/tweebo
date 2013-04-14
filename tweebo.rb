@@ -79,6 +79,7 @@ end
 
 twitterClient.on_timeline_status do |status|
   return if status.reply?
+  return if status.user.id != twitter_user_id
 
   if weiboClient.authorized?
     weiboToken = weiboClient.password.get_token(configs['weibo']['username'], configs['weibo']['password'])
