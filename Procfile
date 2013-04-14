@@ -1,1 +1,1 @@
-worker: ruby tweebo.rb
+web: bundle exec tweebo.rb
