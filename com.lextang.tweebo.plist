@@ -6,7 +6,7 @@
   <string>com.lextang.tweebo</string>
   <key>ProgramArguments</key>
   <array>
-    <string>ruby</string>
+    <string>/usr/bin/env ruby</string>
     <string>/Users/Lex/Dropbox/ruby/tweebo/tweebo.rb</string>
   </array>
   <key>RunAtLoad</key>

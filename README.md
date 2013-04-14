@@ -53,6 +53,10 @@ autostart=true
 autorestart=unexpected
 startretries=3
 startsecs=3
+stdout_logfile=/tmp/tweebo.log
+stdout_logfile_maxbytes=1MB
+stderr_logfile=/tmp/tweebo.error.log
+stderr_logfile_maxbytes=1MB
 ```
 
 
