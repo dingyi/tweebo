@@ -13,7 +13,7 @@ require 'net/http'
 def url_expand(url)
   begin
     uri = URI(url)
-    Net::HTTP.new(uri.host, uri.port).get(uri.path).header['location']
+    Net::HTTP.new(uri.host, 80).get(uri.path).header['location']
   rescue
     url
   end
@@ -30,8 +30,7 @@ end
 def institutionalizedWeibo(text, textMode=false)
   newText = text
   newText = newText.gsub(/https?\:\/\/[^\s]+/) do |match|
-    expanded_url = url_expand(match)
-    googl(expanded_url)
+    googl(url_expand(url_expand(match)) || match)
   end
   newText = newText.gsub(/https?\:\/\/([^\s]+)/, '🈲\1') if textMode
   newText = newText.gsub(/@([^\s]+)/, '👼\1')
@@ -90,9 +89,8 @@ twitterClient.on_timeline_status do |status|
   begin
     weiboText = institutionalizedWeibo(status.text) || DateTime.now().to_s
     weiboClient.statuses.update(weiboText)
-  rescue Exception => e
-    error_code = e.response.parsed['error_code']
-    if error_code == 20018
+  rescue OAuth2::Error => e
+    if e.response and e.response.parsed['error_code'] == 20018
       weiboText = institutionalizedWeibo(status.text, true) || DateTime.now().to_s
       sleep(60)
       weiboClient.statuses.update(weiboText)
