@@ -27,15 +27,20 @@ twitter:
   oauth_token_secret: YOUR_OAUTH_TOKEN_SECRET
 
 weibo:
-  app_key:      211160679
-  app_secret:   63b64d531b98c2dbff2443816f274dd3
   username:     微博用户名
   password:     微博密码
-  callback_url: http://weibo.com/
 ```
 
 
-### 启动服务
+### 服务
+#### Heroku
+先 ```heroku create``` 创建 Heroku 项目。
+然后增加配置：
+```
+heroku config:add TWITTER_SCREEN_NAME= TWITTER_CONSUMER_KEY= TWITTER_CONSUMER_SECRET= TWITTER_OAUTH_TOKEN= TWITTER_OAUTH_TOKEN_SECRET= WEIBO_USERNAME= WEIBO_PASSWORD=
+```
+
+
 #### Mac OS
 Mac 上建议用 [lunchy](https://github.com/mperham/lunchy)，配置见 com.lextang.tweebo.plist，注意先修改其中的安装地址。
 ```
