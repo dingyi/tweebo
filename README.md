@@ -1,8 +1,9 @@
 # tweebo
 
-同步 Twitter 到新浪微博...
+自动同步 Twitter 到新浪微博的服务，用了 Twitter Stream API，一发推就试着同步到微博。
 参考了前同事的 [t2w](https://github.com/xream/t2w)。
-不过我这个 Ruby 的实现不用自己查 Twitter UserID，而且链接用 goo.gl 缩短即使被墙也可以成功发到新浪上，比他的好用一点 ^___^
+不过我这个 Ruby 的实现不用自己查 Twitter UserID，而且链接用 goo.gl 缩短即使被墙也可以成功发到新浪上，比他的好用一点点 ^___^
+
 
 ### 安装
 
@@ -11,6 +12,9 @@ $ git clone https://github.com/lexrus/tweebo.git
 $ cd tweebo
 $ bundle install
 ```
+
+
+### 使用方法
 
 新建一个 config.yml 文件，内容如下：
 
@@ -30,7 +34,27 @@ weibo:
   callback_url: http://weibo.com/
 ```
 
-建议用 supervisor 启动 ```ruby tweebo.rb```
+
+### 启动服务
+#### Mac OS
+Mac 上建议用 [lunchy](https://github.com/mperham/lunchy)，配置见 com.lextang.tweebo.plist，注意先修改其中的安装地址。
+```
+$ lunchy install com.lextang.tweebo.plist
+$ lunchy start tweebo
+```
+#### Linux
+Linux 上建议用 [supervisor](http://supervisord.org)，假设装在 /usr/local/tweebo 目录下，配置是：
+```
+[program:tweebo]
+command=/usr/bin/env ruby /usr/local/tweebo/tweebo.rb
+numprocs=1
+directory=/usr/local/tweebo
+autostart=true
+autorestart=unexpected
+startretries=3
+startsecs=3
+```
+
 
 ### LICENSE
 Copyright (C) 2013 LexTang.com
