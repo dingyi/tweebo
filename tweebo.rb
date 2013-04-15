@@ -34,17 +34,12 @@ def institutionalizedWeibo(text, textMode=false)
     googl(url_expand(match))
   end
   newText = newText.gsub(/https?\:\/\/([^\s]+)/, '🈲\1') if textMode
-  newText = newText.gsub(/@([^\s]+)/, '👼\1')
-  puts newText
-  newText
+  newText.gsub(/@([^\s]+)/, '👼\1')
 end
 
 configs = nil
 if File.exists?('config.yml')
   configs = YAML.load(File.read('config.yml'))
-else
-  #puts 'Please create your config.yml'
-  #exit(1)
 end
 
 
@@ -73,10 +68,14 @@ WeiboOAuth2::Config.api_key = '211160679'
 WeiboOAuth2::Config.api_secret = '63b64d531b98c2dbff2443816f274dd3'
 WeiboOAuth2::Config.redirect_uri = 'http://weibo.com/'
 weiboClient = WeiboOAuth2::Client.new
-weiboToken = weiboClient.password.get_token(
-    ENV['WEIBO_USERNAME'] || configs['weibo']['username'],
-    ENV['WEIBO_PASSWORD'] || configs['weibo']['password'])
-weiboClient.get_token_from_hash({:access_token => weiboToken.token, :expires_at => weiboToken.expires_at})
+
+def weiboLogin()
+  weiboToken = weiboClient.password.get_token(
+      ENV['WEIBO_USERNAME'] || configs['weibo']['username'],
+      ENV['WEIBO_PASSWORD'] || configs['weibo']['password'])
+  weiboClient.get_token_from_hash({:access_token => weiboToken.token, :expires_at => weiboToken.expires_at})
+end
+
 
 twitterClient.on_error do |message|
   puts message
@@ -86,11 +85,8 @@ twitterClient.on_timeline_status do |status|
   return if status.reply?
   return if status.user.id != twitter_user_id
 
-  if weiboClient.authorized?
-    weiboToken = weiboClient.password.get_token(
-        ENV['WEIBO_USERNAME'] || configs['weibo']['username'],
-        ENV['WEIBO_PASSWORD'] || configs['weibo']['password'])
-    weiboClient.get_token_from_hash({:access_token => weiboToken.token, :expires_at => weiboToken.expires_at})
+  unless weiboClient.authorized?
+    weiboLogin()
   end
 
   return if weiboClient.statuses.nil?
