@@ -13,8 +13,9 @@ require 'net/http'
 def url_expand(url)
   begin
     uri = URI(url)
-    Net::HTTP.new(uri.host, 80).get(uri.path).header['location']
-  rescue
+    location = Net::HTTP.new(uri.host, 80).get(uri.path).header['location']
+    location.empty??url:url_expand(location)
+  rescue Exception => e
     url
   end
 end
@@ -22,7 +23,7 @@ end
 def googl(url)
   begin
     Googl.shorten(url).short_url
-  rescue
+  rescue Exception => e
     url
   end
 end
@@ -30,7 +31,7 @@ end
 def institutionalizedWeibo(text, textMode=false)
   newText = text
   newText = newText.gsub(/https?\:\/\/[^\s]+/) do |match|
-    googl(url_expand(url_expand(match)) || match)
+    googl(url_expand(match))
   end
   newText = newText.gsub(/https?\:\/\/([^\s]+)/, '🈲\1') if textMode
   newText = newText.gsub(/@([^\s]+)/, '👼\1')
