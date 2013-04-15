@@ -1,1 +1,1 @@
-web: bundle exec tweebo.rb
+web: bundle exec ruby tweebo.rb
