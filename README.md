@@ -35,9 +35,9 @@ weibo:
 ### 服务
 #### Heroku
 先 ```heroku create``` 创建 Heroku 项目。
-然后增加配置：
+然后增加配置(注意替换)：
 ```
-$ heroku config:add TWITTER_SCREEN_NAME= TWITTER_CONSUMER_KEY= TWITTER_CONSUMER_SECRET= TWITTER_OAUTH_TOKEN= TWITTER_OAUTH_TOKEN_SECRET= WEIBO_USERNAME= WEIBO_PASSWORD=
+$ heroku config:add TWITTER_SCREEN_NAME='...' TWITTER_CONSUMER_KEY='...' TWITTER_CONSUMER_SECRET='...' TWITTER_OAUTH_TOKEN='...' TWITTER_OAUTH_TOKEN_SECRET='...' WEIBO_USERNAME='...' WEIBO_PASSWORD='...'
 $ git push -v heroku master:master
 ```
 

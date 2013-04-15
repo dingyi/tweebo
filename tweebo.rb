@@ -39,8 +39,14 @@ def institutionalizedWeibo(text, textMode=false)
   newText
 end
 
+configs = nil
+if File.exists?('config.yml')
+  configs = YAML.load(File.read('config.yml'))
+end
 
-configs = YAML.load(File.read('config.yml'))
+if ENV['TWITTER_CONSUMER_KEY'].nil? and configs.nil?
+  exit(1)
+end
 
 
 Twitter.configure do |config|
