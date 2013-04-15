@@ -42,10 +42,9 @@ end
 configs = nil
 if File.exists?('config.yml')
   configs = YAML.load(File.read('config.yml'))
-end
-
-if ENV['TWITTER_CONSUMER_KEY'].nil? and configs.nil?
-  exit(1)
+else
+  #puts 'Please create your config.yml'
+  #exit(1)
 end
 
 
@@ -64,7 +63,7 @@ TweetStream.configure do |config|
   config.consumer_key  = ENV['TWITTER_CONSUMER_KEY'] || configs['twitter']['consumer_key']
   config.consumer_secret = ENV['TWITTER_CONSUMER_SECRET'] || configs['twitter']['consumer_secret']
   config.oauth_token  = ENV['TWITTER_OAUTH_TOKEN'] || configs['twitter']['oauth_token']
-  config.oauth_token_secret = ENV['TWITTER_OAUTH_TOKEN'] || configs['twitter']['oauth_token_secret']
+  config.oauth_token_secret = ENV['TWITTER_OAUTH_TOKEN_SECRET'] || configs['twitter']['oauth_token_secret']
   config.auth_method = :oauth
 end
 twitterClient = TweetStream::Client.new
@@ -73,14 +72,11 @@ twitterClient = TweetStream::Client.new
 WeiboOAuth2::Config.api_key = '211160679'
 WeiboOAuth2::Config.api_secret = '63b64d531b98c2dbff2443816f274dd3'
 WeiboOAuth2::Config.redirect_uri = 'http://weibo.com/'
-
 weiboClient = WeiboOAuth2::Client.new
 weiboToken = weiboClient.password.get_token(
     ENV['WEIBO_USERNAME'] || configs['weibo']['username'],
     ENV['WEIBO_PASSWORD'] || configs['weibo']['password'])
-weiboClient.get_token_from_hash({:access_token => weiboToken.token,
-                                 :expires_at => weiboToken.expires_at})
-
+weiboClient.get_token_from_hash({:access_token => weiboToken.token, :expires_at => weiboToken.expires_at})
 
 twitterClient.on_error do |message|
   puts message
@@ -91,7 +87,9 @@ twitterClient.on_timeline_status do |status|
   return if status.user.id != twitter_user_id
 
   if weiboClient.authorized?
-    weiboToken = weiboClient.password.get_token(configs['weibo']['username'], configs['weibo']['password'])
+    weiboToken = weiboClient.password.get_token(
+        ENV['WEIBO_USERNAME'] || configs['weibo']['username'],
+        ENV['WEIBO_PASSWORD'] || configs['weibo']['password'])
     weiboClient.get_token_from_hash({:access_token => weiboToken.token, :expires_at => weiboToken.expires_at})
   end
 
