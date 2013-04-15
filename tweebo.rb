@@ -68,13 +68,10 @@ WeiboOAuth2::Config.api_key = '211160679'
 WeiboOAuth2::Config.api_secret = '63b64d531b98c2dbff2443816f274dd3'
 WeiboOAuth2::Config.redirect_uri = 'http://weibo.com/'
 weiboClient = WeiboOAuth2::Client.new
-
-def weiboLogin()
-  weiboToken = weiboClient.password.get_token(
-      ENV['WEIBO_USERNAME'] || configs['weibo']['username'],
-      ENV['WEIBO_PASSWORD'] || configs['weibo']['password'])
-  weiboClient.get_token_from_hash({:access_token => weiboToken.token, :expires_at => weiboToken.expires_at})
-end
+weiboToken = weiboClient.password.get_token(
+    ENV['WEIBO_USERNAME'] || configs['weibo']['username'],
+    ENV['WEIBO_PASSWORD'] || configs['weibo']['password'])
+weiboClient.get_token_from_hash({:access_token => weiboToken.token, :expires_at => weiboToken.expires_at})
 
 
 twitterClient.on_error do |message|
@@ -86,7 +83,10 @@ twitterClient.on_timeline_status do |status|
   return if status.user.id != twitter_user_id
 
   unless weiboClient.authorized?
-    weiboLogin()
+    weiboToken = weiboClient.password.get_token(
+        ENV['WEIBO_USERNAME'] || configs['weibo']['username'],
+        ENV['WEIBO_PASSWORD'] || configs['weibo']['password'])
+    weiboClient.get_token_from_hash({:access_token => weiboToken.token, :expires_at => weiboToken.expires_at})
   end
 
   return if weiboClient.statuses.nil?
