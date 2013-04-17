@@ -4,18 +4,16 @@
 参考了前同事的 [t2w](https://github.com/xream/t2w)，重写成 Ruby 的，并做了一些改进。
 
 
----------
-
 ## 特点
-* 可以部署到 Heroku，详见下面的 Heroku 部署方法
 * 提供 supervisord 和 launchdaemon 的配置
 * 不用自己查 Twitter User ID，只要提供 Screen Name
 * 缩链接先展开，再用 goo.gl 缩短，防止新浪微博过滤，被墙的地址也能成功发到新浪上
+* 可以部署到 Heroku，但是 Heroku 连接新浪很不稳定，不推荐这种方式
 
 
 ## 基本要求
-* Ruby 1.9.3 推荐用 [rbenv](https://github.com/sstephenson/rbenv/) 安装
-* bundle 用 ```gem install bundle``` 安装
+* Ruby 1.9.3 建议用 [rbenv](https://github.com/sstephenson/rbenv/) 安装
+* bundler 用 ```gem install bundler``` 安装
 * 在 [dev.twitter.com](https://dev.twitter.com) 上建一个 App，然后拿到 consumer key/secret 和 oauth token/secret 一共四条字符串
 * 新浪微博帐号
 
@@ -30,20 +28,6 @@ bundle install
 ```
 git fetch
 ```
-
----------
-
-## Heroku 部署方法
-
-进入 tweebo 目录后先 ```heroku create``` 创建 Heroku 项目。
-然后增加配置(注意替换单引号里的值)：
-```
-heroku config:add TWITTER_SCREEN_NAME='...' TWITTER_CONSUMER_KEY='...' TWITTER_CONSUMER_SECRET='...' TWITTER_OAUTH_TOKEN='...' TWITTER_OAUTH_TOKEN_SECRET='...' WEIBO_USERNAME='...' WEIBO_PASSWORD='...'
-```
-然后用 ```heroku config``` 检查一下，没有错的话提交上去 ```git push -v heroku master:master``` 就部署好了。
-发个推检查一下有没有同步到微博吧。
-
-另外，觉得这样配置不够优雅的话可以移步 [heroku-config](https://github.com/ddollar/heroku-config) 用 .env 来配置 。
 
 
 ---------
@@ -91,6 +75,21 @@ stdout_logfile_maxbytes=1MB
 stderr_logfile=/tmp/tweebo.error.log
 stderr_logfile_maxbytes=1MB
 ```
+
+
+---------
+
+## Heroku 部署方法
+
+进入 tweebo 目录后先 ```heroku create``` 创建 Heroku 项目。
+然后增加配置(注意替换单引号里的值)：
+```
+heroku config:add TWITTER_SCREEN_NAME='...' TWITTER_CONSUMER_KEY='...' TWITTER_CONSUMER_SECRET='...' TWITTER_OAUTH_TOKEN='...' TWITTER_OAUTH_TOKEN_SECRET='...' WEIBO_USERNAME='...' WEIBO_PASSWORD='...'
+```
+然后用 ```heroku config``` 检查一下，没有错的话提交上去 ```git push -v heroku master:master``` 就部署好了。
+发个推检查一下有没有同步到微博吧。
+
+另外，觉得这样配置不够优雅的话可以移步 [heroku-config](https://github.com/ddollar/heroku-config) 用 .env 来配置 。
 
 
 ### LICENSE
